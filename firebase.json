@@ -1,0 +1,37 @@
+{
+  "hosting": {
+    "public": "public",
+    "ignore": [
+      "firebase.json",
+      "**/.*",
+      "**/node_modules/**"
+    ],
+    "rewrites": [
+      {
+        "source": "/api/v1/on-covid-19",
+        "function": "app"
+      },
+      {
+        "source": "/api/v1/on-covid-19/json",
+        "function": "app"
+      },
+      {
+        "source": "/api/v1/on-covid-19/xml",
+        "function": "app"
+      },
+      {
+        "source": "/api/v1/on-covid-19/logs",
+        "function": "app"
+      },
+       {
+        "source": "**",
+        "destination": "/index.html"
+      }
+    ]
+  },
+  "functions": {
+    "predeploy": [
+      "npm --prefix \"$RESOURCE_DIR\" run lint"
+    ]
+  }
+}
