@@ -5,7 +5,7 @@ function futureImpactEstimate(reportedCases, estimateFactor, timeToElapse, perio
     const currentlyInfected = reportedCases * estimateFactor;
     const infectionsByRequestedTime = currentlyInfected * (Math.pow(2, Math.trunc(period / 3)))
     const severeCasesByRequestedTime = Math.trunc(0.15 * infectionsByRequestedTime)
-    const hospitalBedsByRequestedTime = (Math.trunc(0.35 * totalHospitalBeds)) - severeCasesByRequestedTime;
+    const hospitalBedsByRequestedTime = Math.trunc((0.35 * totalHospitalBeds) - severeCasesByRequestedTime);
     const casesForICUByRequestedTime = Math.trunc(0.05 * infectionsByRequestedTime)
     const casesForVentilatorsByRequestedTime = Math.trunc(0.02 * infectionsByRequestedTime)
     const dollarsInFlight = Math.trunc((infectionsByRequestedTime * avgDailyIncomePopulation * avgDailyIncomeInUSD) / period);
@@ -34,9 +34,10 @@ function convertTimeToElapse(timeToElapse, periodType) {
             break;
         default:
     }
-    return period
+    return Math.trunc(period)
 }
 const covid19ImpactEstimator = (data) => {
+    console.log(JSON.stringify(data))
     const { region, periodType, timeToElapse, reportedCases, totalHospitalBeds } = data
     const { avgDailyIncomeInUSD, avgDailyIncomePopulation} = region;
     const response = {
