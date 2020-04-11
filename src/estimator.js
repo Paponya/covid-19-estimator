@@ -37,8 +37,8 @@ function convertTimeToElapse(timeToElapse, periodType) {
     return period
 }
 const covid19ImpactEstimator = (data) => {
-    const { region, periodType, timeToElapse, reportedCases, totalHospitalBeds } = data.body
-    const { avgDailyIncomeInUSD, avgDailyIncomePopulation} = region;
+    const { periodType, timeToElapse, reportedCases, totalHospitalBeds } = data.body
+    const { avgDailyIncomeInUSD, avgDailyIncomePopulation } = data.body.region;
     const response = {
         data: data.body, //input data
         impact: futureImpactEstimate(reportedCases, 10, timeToElapse, periodType, totalHospitalBeds, avgDailyIncomeInUSD, avgDailyIncomePopulation), // best case estimates
