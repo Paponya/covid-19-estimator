@@ -1,18 +1,20 @@
 const functions = require('firebase-functions');
 const express = require('express');
-const fs = require('fs')
-const morgan = require('morgan')
-const path = require('path')
+const fs = require('fs');
+const morgan = require('morgan');
+const path = require('path');
+const os = require('os');
 const xml2js = require('xml2js');
 const covid19ImpactEstimator = require('./estimator');
 const validateRequest = require('./validator');
 
 const app = express();
-const accessLogStream = fs.createWriteStream(path.join(__dirname, 'logs/access.log'), { flags: 'a' })
+const tempFilePath = path.join(os.tmpdir(), 'access.log');
+const accessLogStream = fs.createWriteStream(path.join(__dirname, tempFilePath), { flags: 'a' })
 app.use(express.json());
 app.use(morgan('tiny', { stream: accessLogStream }))
 const baseRoute = '/api/v1/on-covid-19'
-app.use(`${baseRoute}/logs`, express.static(path.join(__dirname, 'logs/access.log')))
+app.use(`${baseRoute}/logs`, express.static(path.join(__dirname, tempFilePath)))
 
 app.post(baseRoute, (req, res) => {
     jsonResponse(req, res)
