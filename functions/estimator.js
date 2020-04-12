@@ -22,7 +22,7 @@ function futureImpactEstimate(reportedCases, estimateFactor, timeToElapse, perio
 }
 function convertTimeToElapse(timeToElapse, periodType) {
     let period
-    switch (periodType) {
+    switch (periodType.toLowerCase()) {
         case 'days':
             period = timeToElapse
             break;
