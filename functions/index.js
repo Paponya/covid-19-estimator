@@ -11,10 +11,27 @@ const validateRequest = require('./validator');
 
 const app = express();
 app.use(cors);
-const tempFilePath =  '/tmp/log.txt';
+morgan.token('customUrl', (req) => {
+    return req.customUrl
+})
+app.use(assignCustomUrl)
+const tempFilePath = '/tmp/log.txt';
 const accessLogStream = fs.createWriteStream(tempFilePath, { flags: 'a' })
 app.use(express.json());
-app.use(morgan('tiny', { stream: accessLogStream }))
+// app.use(morgan( (tokens, req, res)=> {
+//     return [
+//         tokens.method(req, res),
+//         tokens.customUrl(req, res),
+//         tokens.status(req, res),
+//         // tokens.res(req, res, 'content-length'), '-',
+//         tokens['response-time'](req, res)[0], 'ms'
+//     ].join('\t\t')
+// }, { stream: accessLogStream }))
+app.use(morgan(':method\t\t:customUrl\t\t:status\t\t:total-time[00] ms', { stream: accessLogStream }))
+function assignCustomUrl(req, res, next) {
+    req.customUrl = req.url
+    next()
+}
 const baseRoute = '/api/v1/on-covid-19'
 app.use(`${baseRoute}/logs`, express.static(tempFilePath))
 
@@ -32,7 +49,6 @@ app.post(`${baseRoute}/xml`, (req, res) => {
     res.send(response);
 })
 function jsonResponse(req, res) {
-    console.log(req.body);
     validateRequest(req, res)
     const response = covid19ImpactEstimator(req.body)
     res.send(response);
