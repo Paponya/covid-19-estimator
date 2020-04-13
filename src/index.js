@@ -18,7 +18,7 @@ const accessLogStream = fs.createWriteStream(path.join(__dirname, 'logs/access.l
 app.use(express.json());
 
 // app.use(morgan(':method     :customUrl        :status     :total-time[0] ms', { stream: accessLogStream }))
-app.use(morgan(':method\t\t:customUrl\t\t:status\t\t:response-time[00]\t\tms', { stream: accessLogStream }))
+app.use(morgan(':method\t\t:customUrl\t\t:status\t\t0:total-time[0]ms', { stream: accessLogStream }))
 function assignCustomUrl(req, res, next) {
     req.customUrl = req.url
     next()
