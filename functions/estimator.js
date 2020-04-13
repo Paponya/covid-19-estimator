@@ -22,7 +22,7 @@ function futureImpactEstimate(reportedCases, estimateFactor, timeToElapse, perio
 }
 function convertTimeToElapse(timeToElapse, periodType) {
     let period
-    switch (periodType) {
+    switch (periodType.toLowerCase()) {
         case 'days':
             period = timeToElapse
             break;
@@ -39,7 +39,7 @@ function convertTimeToElapse(timeToElapse, periodType) {
 const covid19ImpactEstimator = (data) => {
     console.log(JSON.stringify(data))
     const { region, periodType, timeToElapse, reportedCases, totalHospitalBeds } = data
-    const { avgDailyIncomeInUSD, avgDailyIncomePopulation} = region;
+    const { avgDailyIncomeInUSD, avgDailyIncomePopulation } = region;
     const response = {
         data: data, //input data
         impact: futureImpactEstimate(reportedCases, 10, timeToElapse, periodType, totalHospitalBeds, avgDailyIncomeInUSD, avgDailyIncomePopulation), // best case estimates
@@ -48,4 +48,4 @@ const covid19ImpactEstimator = (data) => {
     return response;
 };
 
-module.exports  = covid19ImpactEstimator;
+module.exports = covid19ImpactEstimator;
